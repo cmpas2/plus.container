@@ -567,7 +567,7 @@ describe('Container', function () {
 
         container.get('child/B').result.should.be.equal(1);
         container.get('B').should.be.equal(75);
-    })
+    });
 
     it('ability to use parent service for child container (provide)', function () {
 
@@ -593,6 +593,29 @@ describe('Container', function () {
         connect2().ok.should.equal('ok');
         
         connect1.should.be.equal(connect2)
-    })
+    });
+    
+    it('should allow to (chain) register class with dependencies', function () {
+        
+        // dep1
+        var MyClass1 = function () {
+            this.name = "MyClass1"
+        }
+
+        // dep2
+        var myConfig = {my: 'config'};
+
+
+        var MyClass2 = function (dep1, dep2) {
+            this.dep1 = dep1;
+            this.dep2 = dep2;
+        }
+
+        container
+            .register('myService1', MyClass1)
+            .register('myConfig', myConfig)
+            .register('myService2', MyClass2, ['myService1', 'myConfig']);
+
+    });
 
 });

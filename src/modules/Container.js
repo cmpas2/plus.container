@@ -1,6 +1,6 @@
 // class Container
-function Container() {
-    this._new();
+function Container(options) {
+    this._new(options);
 }
 
 // Util
@@ -8,14 +8,21 @@ Container.extend = function (dest, src) {
     for (var i in src) dest[i] = src[i];
 };
 
-Container.create = function () {
-    return new Container();
+Container.create = function (options) {
+    return new Container(options);
 };
 
 // class Container
 Container.extend(Container.prototype, {
 
-    _new: function () {
+    _new: function (options) {
+
+        if( ! options) options = {};
+
+        this.separator = options.separator || '/';
+
+        console.log(this.separator);
+
         this._resolved = new Container.Hash();
         this._register = new Container.Hash();
         this._dependencies = new Container.Hash();
@@ -352,7 +359,6 @@ Container.extend(Container, {
 
 // Accessor
 Container.Accessor = function () {
-    this.separator = '/';
 
     this.getters = [function (context, name) {
         var method = 'get';
