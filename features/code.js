@@ -1,1 +1,1 @@
-module.exports = require('plus.cucumber.code')
+module.exports = require('plus.cucumber.code');

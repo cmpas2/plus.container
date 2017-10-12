@@ -1,0 +1,13 @@
+{
+  "extends": "google",
+  "parserOptions": {
+    "ecmaVersion": 6
+  },
+  "rules": {
+    "comma-dangle": [2, "never"],
+    "guard-for-in": "warn",
+    "space-before-function-paren":"off",
+    "max-lines": ["error", {"max": 70, "skipBlankLines": true, "skipComments": true}],
+    "no-console": "error"
+  }
+}

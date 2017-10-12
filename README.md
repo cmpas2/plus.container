@@ -1,5 +1,7 @@
 # Dependency Injection Container / plus.container
 
+Forked from slavahatnuke/plus.container for extension
+
 https://en.wikipedia.org/wiki/Dependency_injection
 
 That is simple dependency injection container, it allows to keep your application simple and DRY.
@@ -239,8 +241,6 @@ in this case it loads container in this order:
 - `container.js` // register common services
 - `container_test.js` // register environment (test) dependent services and you can override common services
 
-Have a fun and manage your services!
-[+1G Team](http://plus1generation.com)
 
 ### Misc
 

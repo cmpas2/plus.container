@@ -1,6 +1,6 @@
 
-var Container = require('./modules/Container');
-var Loader = require('./modules/Loader');
+const Container = require('./modules/Container');
+const Loader = require('./modules/Loader');
 
 Container.extend(Container, {
     load: function (options) {
