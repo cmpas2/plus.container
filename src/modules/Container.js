@@ -75,8 +75,12 @@ Container.extend(Container.prototype, {
       // see if this container inherits this from a parent
       if (this._resolved.has('parent')) {
         const parentContainer = this._resolved.get('parent');
-        const parentResolved = parentContainer.get(name);
-        if (parentResolved !== null) return parentResolved;
+        const parentResolved = parentContainer.inherit(name, this);
+        if (parentResolved !== null) {
+          // store in child class for later access
+          this.set(name, parentResolved);
+          return parentResolved;
+        }
       }
       // see if this container is a parent 
       if (Container.isFunction(this._parentGetter)) {
@@ -89,6 +93,27 @@ Container.extend(Container.prototype, {
     this.set(name, this.create(name));
 
     return this.get(name);
+  },
+  inherit: function (name, child) {
+    // return self
+    if (name == 'container') return null;
+
+    // use accessor
+    if (this._accesor.isPath(name)) return this._accesor.get(this, name);
+
+    // if resolved return
+    if (this._resolved.has(name)) return this._resolved.get(name);
+
+    // if not registered return null
+    if (!this._register.has(name)) {
+      return null;
+    }
+
+    // resolve with child dependencies but dont store in container
+    let resolvedWithChildDependencies = this._createChildInjected(name, child);
+
+    console.log('resolvedWithChildDependencies', resolvedWithChildDependencies);
+    return resolvedWithChildDependencies;
   },
   set: function (name, definition) {
     if (this._accesor.isPath(name)) {
@@ -225,6 +250,33 @@ Container.extend(Container.prototype, {
     for (let i = 0; i < $inject.length; i++) {
       args.push(this.get($inject[i]));
     }
+
+    // make creator with args
+    const Creator = Container.makeCreator(_class, args);
+
+    // create
+    return new Creator();
+  },
+  _createChildInjected: function (name, child) {
+    // get class
+    const _class = this._register.get(name);
+
+    // get names
+    const $inject = this._dependencies.has(name)
+      ? this._dependencies.get(name)
+      : []
+    ;
+
+    // args collection
+    let args = [];
+
+    // collect args
+    for (let i = 0; i < $inject.length; i++) {
+      let cInj = child.get($inject[i]);
+      args.push(cInj ? cInj : this.get($inject[i]));
+    }
+
+    console.log('args', args);
 
     // make creator with args
     const Creator = Container.makeCreator(_class, args);

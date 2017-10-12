@@ -19,7 +19,8 @@ function Router(ioc) {
         let handled = reqContainer.get(i.handler);
         return defaultResponseHandler(null, handled, res);
       } catch (e) {
-        return defaultResponseHandler(e, res);
+        console.log(e);
+        //return defaultResponseHandler(e, res);
       }
     });
   }
@@ -52,7 +53,7 @@ function defaultResponseHandler(err, handled, res) {
  * @return {Ioc}
  */
 function createRequestContainer(ioc, req, res) {
-  const IocFactory = require('./services/plus.container/Container');
+  const IocFactory = require('../src/Container');
   const requestIoc = IocFactory.create();
 
   requestIoc

@@ -10,10 +10,33 @@ describe('Container', function () {
     container = new Container();
   });
 
-  it('should allow to register class: container.register("myService", function MyClass(){})', function () {
-    const MyClass = function () {
-
+  it('should allow request body to be injected into a parent container registry instance', function () {
+    const req = () => {
+      return {
+        body: {
+          msg: 'Testing worked'
+        }
+      };
     };
-    container.register('myService', MyClass);
+
+    const test = (req) => {
+      return req.body.msg;
+    };
+
+    const parent = new Container();
+
+    parent.register('test', test, ['req']);
+
+    const child = new Container();
+
+    child.register('parent', parent);
+
+    child.register('req', req);
+
+    const action = child.get('test');
+
+    action.msg.should.be.equal('Testing worked');
+
+
   });
 });

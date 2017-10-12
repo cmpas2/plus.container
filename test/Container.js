@@ -690,6 +690,37 @@ describe('Container', function () {
 
   });
 
+  it('ability to (extend) parent service with child container inheritance of registry with child dependency injection into parent object instance', function () {
+    
+        const container = require('../lite').create();
+        const child = require('../lite').create();
+    
+        let connect = function connect(msg) {
+          return {ok: msg};
+        };
+    
+        let connect2 = function connect2(msg) {
+          return {ok: msg};
+        };
+
+        container.add('connect', connect, ['msg']);
+
+        child.add('parent', container);
+
+        child.add('msg', 'ok');
+
+        let cn = child.get('connect');
+        cn.ok.should.be.equal('ok');
+
+        child.add('connect', connect2, ['msg']);
+
+        child.add('msg', 'ok2');
+
+        let cn2 = child.get('connect');
+        cn2.ok.should.be.equal('ok2');
+    
+      });
+
   it('should allow to (chain) register class with dependencies', function () {
 
     // dep1
