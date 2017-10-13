@@ -1,6 +1,6 @@
 {
   "name": "di.container",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Dependency Injection Container - plus.container",
   "main": "src/Container.js",
   "homepage": "https://github.com/cmpas2/plus.container",
