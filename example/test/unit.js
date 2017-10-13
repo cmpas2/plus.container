@@ -3,6 +3,7 @@
 
 describe('Container', function () {
   const Container = require('../../src/Container');
+  const reqres = require('reqres');
   let container;
   require('chai').should();
 
@@ -11,13 +12,11 @@ describe('Container', function () {
   });
 
   it('should allow request body to be injected into a parent container registry instance', function () {
-    const req = () => {
-      return {
-        body: {
-          msg: 'Testing worked'
-        }
-      };
-    };
+    let req = reqres.req({
+      body: {
+        msg: 'Testing worked'
+      }
+    });
 
     const test = (req) => {
       return req.body;
@@ -36,7 +35,6 @@ describe('Container', function () {
     const action = child.get('test');
 
     action.msg.should.be.equal('Testing worked');
-
 
   });
 });

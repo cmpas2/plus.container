@@ -112,7 +112,6 @@ Container.extend(Container.prototype, {
     // resolve with child dependencies but dont store in container
     let resolvedWithChildDependencies = this._createChildInjected(name, child);
 
-    console.log('resolvedWithChildDependencies', resolvedWithChildDependencies);
     return resolvedWithChildDependencies;
   },
   set: function (name, definition) {
@@ -275,8 +274,6 @@ Container.extend(Container.prototype, {
       let cInj = child.get($inject[i]);
       args.push(cInj ? cInj : this.get($inject[i]));
     }
-
-    console.log('args', args);
 
     // make creator with args
     const Creator = Container.makeCreator(_class, args);
