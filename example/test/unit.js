@@ -20,7 +20,7 @@ describe('Container', function () {
     };
 
     const test = (req) => {
-      return req.body.msg;
+      return req.body;
     };
 
     const parent = new Container();
