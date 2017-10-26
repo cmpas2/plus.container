@@ -1,3 +1,4 @@
+/* eslint-disable */
 describe('Container', function () {
 
   var container, Container = require('../src/Container');
@@ -482,7 +483,32 @@ describe('Container', function () {
 
     "AA".should.equal(instance.a);
     "BB".should.equal(instance.b);
-  })
+  });
+
+  it('should support es6 class with injectable', function () {
+    "use strict";
+
+    class MyService {
+      static $inject() {
+        return ['A', 'B'];
+      }
+      constructor(a, b) {
+        this.a = a;
+        this.b = b;
+      }
+    }
+
+    container.register('A', 'AA');
+    container.register('B', 'BB');
+    container.register('myService', MyService);
+
+    var instance = container.get('myService');
+
+    instance.should.be.instanceof(MyService);
+
+    "AA".should.equal(instance.a);
+    "BB".should.equal(instance.b);
+  });
 
   it('add is alisas for register', function () {
     container.add('x1', 1);
@@ -691,35 +717,35 @@ describe('Container', function () {
   });
 
   it('ability to (extend) parent service with child container inheritance of registry with child dependency injection into parent object instance', function () {
-    
-        const container = require('../lite').create();
-        const child = require('../lite').create();
-    
-        let connect = function connect(msg) {
-          return {ok: msg};
-        };
-    
-        let connect2 = function connect2(msg) {
-          return {ok: msg};
-        };
 
-        container.add('connect', connect, ['msg']);
+    const container = require('../lite').create();
+    const child = require('../lite').create();
 
-        child.add('parent', container);
+    let connect = function connect(msg) {
+      return {ok: msg};
+    };
 
-        child.add('msg', 'ok');
+    let connect2 = function connect2(msg) {
+      return {ok: msg};
+    };
 
-        let cn = child.get('connect');
-        cn.ok.should.be.equal('ok');
+    container.add('connect', connect, ['msg']);
 
-        child.add('connect', connect2, ['msg']);
+    child.add('parent', container);
 
-        child.add('msg', 'ok2');
+    child.add('msg', 'ok');
 
-        let cn2 = child.get('connect');
-        cn2.ok.should.be.equal('ok2');
-    
-      });
+    let cn = child.get('connect');
+    cn.ok.should.be.equal('ok');
+
+    child.add('connect', connect2, ['msg']);
+
+    child.add('msg', 'ok2');
+
+    let cn2 = child.get('connect');
+    cn2.ok.should.be.equal('ok2');
+
+  });
 
   it('should allow to (chain) register class with dependencies', function () {
 

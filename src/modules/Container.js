@@ -48,6 +48,11 @@ Container.extend(Container.prototype, {
 
     if (Container.isFunction(definition)) {
       this._register.set(name, definition);
+      if ( ! dependencies) {
+        if (definition.$inject && typeof definition.$inject === 'function' ) {
+          dependencies = definition.$inject();
+        }
+      }
       this._dependencies.set(
         name,
         dependencies || definition.$inject || []
